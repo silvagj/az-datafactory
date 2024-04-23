@@ -1,0 +1,83 @@
+{
+	"name": "05_dataflow_JSONarrays",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CustomerJSON",
+						"type": "DatasetReference"
+					},
+					"name": "CustomersourceJSON"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "CustomerCours_table",
+						"type": "DatasetReference"
+					},
+					"name": "CustomerSilvapooldbJSON"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FlatenJSONCourse"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          customerid as integer,",
+				"          customername as string,",
+				"          registered as boolean,",
+				"          courses as string[],",
+				"          details as (mobile as string, city as string)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> CustomersourceJSON",
+				"CustomersourceJSON foldDown(unroll(courses, courses),",
+				"     mapColumn(",
+				"          courses,",
+				"          customerid,",
+				"          customername,",
+				"          registered,",
+				"          mobile = details.mobile,",
+				"          city = details.city",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> FlatenJSONCourse",
+				"FlatenJSONCourse sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CustomerID as integer,",
+				"          CustomerName as string,",
+				"          Registered as boolean,",
+				"          Courses as string,",
+				"          Mobile as string,",
+				"          City as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          CustomerID = customerid,",
+				"          CustomerName = customername,",
+				"          Registered = registered,",
+				"          Courses = courses,",
+				"          Mobile = mobile,",
+				"          City = city",
+				"     )) ~> CustomerSilvapooldbJSON"
+			]
+		}
+	}
+}

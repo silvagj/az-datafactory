@@ -1,0 +1,19 @@
+{
+	"name": "logdatajson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "silvadatalake_service_connection",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "json"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

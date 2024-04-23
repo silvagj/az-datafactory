@@ -1,0 +1,88 @@
+{
+	"name": "06_dataflow_accesslogs",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "accesslog",
+						"type": "DatasetReference"
+					},
+					"name": "accesslogstream"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ServerlogsTable",
+						"type": "DatasetReference"
+					},
+					"name": "ServerlogsStream"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectcolumns"
+				},
+				{
+					"name": "derivedTimeColumn"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {127.0.0.1 - - [29/Mar/2022:19:38:28 -0400] \"GET / HTTP/1.1\" 302 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML} as string,",
+				"          { like Gecko) Chrome/99.0.4844.82 Safari/537.36\"} as string,",
+				"          Column_3 as string,",
+				"          Column_4 as string,",
+				"          Column_5 as string,",
+				"          Column_6 as string,",
+				"          Column_7 as string,",
+				"          Column_8 as string,",
+				"          Column_9 as string,",
+				"          Column_10 as string,",
+				"          Column_11 as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> accesslogstream",
+				"accesslogstream select(mapColumn(",
+				"          Remote_addr = {127.0.0.1 - - [29/Mar/2022:19:38:28 -0400] \"GET / HTTP/1.1\" 302 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML},",
+				"          Time_local = Column_4,",
+				"          Request = Column_6,",
+				"          Status = Column_7,",
+				"          Bytes = Column_8",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectcolumns",
+				"selectcolumns derive(Time_local = substring(Time_local, 2, length(Time_local)-1)) ~> derivedTimeColumn",
+				"derivedTimeColumn sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Remote_addr as string,",
+				"          Time_local as string,",
+				"          Request as string,",
+				"          Status as integer,",
+				"          Bytes as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Remote_addr,",
+				"          Time_local,",
+				"          Request,",
+				"          Status,",
+				"          Bytes",
+				"     )) ~> ServerlogsStream"
+			]
+		}
+	}
+}
