@@ -1,0 +1,34 @@
+{
+	"name": "14-StoredProcedure",
+	"properties": {
+		"activities": [
+			{
+				"name": "Stored procedureDimCustomer",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[GetCustomerDetails]",
+					"storedProcedureParameters": {
+						"CustomerID": {
+							"value": "150",
+							"type": "Int32"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "silvadataworkspace_silvapooldb_connection",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
