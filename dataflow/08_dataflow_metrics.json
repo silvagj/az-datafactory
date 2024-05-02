@@ -12,7 +12,15 @@
 					"name": "metricstream"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "metricoutput",
+						"type": "DatasetReference"
+					},
+					"name": "metriccleaned"
+				}
+			],
 			"transformations": [
 				{
 					"name": "select1"
@@ -41,7 +49,6 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     purgeFiles: true,",
 				"     documentForm: 'documentPerLine') ~> metricstream",
 				"metricstream select(mapColumn(",
 				"          Metrictime = time,",
@@ -49,7 +56,14 @@
 				"          OperationName = operationName",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> metriccleaned"
 			]
 		}
 	}
