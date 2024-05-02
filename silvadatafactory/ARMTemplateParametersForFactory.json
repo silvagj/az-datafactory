@@ -17,6 +17,9 @@
 		"silvadb_connection_connectionString": {
 			"value": ""
 		},
+		"silvadbconnection_connectionString": {
+			"value": ""
+		},
 		"datalakelinkedservice_properties_typeProperties_url": {
 			"value": "https://silvadatalake.dfs.core.windows.net/"
 		},

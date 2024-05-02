@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'silvadb_connection'"
 		},
+		"silvadbconnection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'silvadbconnection'"
+		},
 		"datalakelinkedservice_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://silvadatalake.dfs.core.windows.net/"
@@ -1633,6 +1637,60 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "addtodb",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "metricsdataflow",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.json",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "metricoutput",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "webmetrictable",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -1641,7 +1699,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/08_dataflow_metrics')]"
+				"[concat(variables('factoryId'), '/dataflows/08_dataflow_metrics')]",
+				"[concat(variables('factoryId'), '/datasets/metricoutput')]",
+				"[concat(variables('factoryId'), '/datasets/webmetrictable')]"
 			]
 		},
 		{
@@ -4472,6 +4532,55 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/inputmetrics')]",
 				"[concat(variables('factoryId'), '/datasets/metricoutput')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/silvadbconnection')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('silvadbconnection_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/webmetrictable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "silvadb_connection",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Category",
+						"type": "varchar"
+					},
+					{
+						"name": "Metrictime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "OperationName",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "WebMetrics"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/silvadb_connection')]"
 			]
 		}
 	]

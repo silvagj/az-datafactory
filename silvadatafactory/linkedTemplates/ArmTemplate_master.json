@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'silvadb_connection'"
 		},
+		"silvadbconnection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'silvadbconnection'"
+		},
 		"datalakelinkedservice_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://silvadatalake.dfs.core.windows.net/"
@@ -69,6 +73,9 @@
 					},
 					"silvadb_connection_connectionString": {
 						"value": "[parameters('silvadb_connection_connectionString')]"
+					},
+					"silvadbconnection_connectionString": {
+						"value": "[parameters('silvadbconnection_connectionString')]"
 					},
 					"datalakelinkedservice_properties_typeProperties_url": {
 						"value": "[parameters('datalakelinkedservice_properties_typeProperties_url')]"
