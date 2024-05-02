@@ -963,7 +963,12 @@
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> metriccleaned"
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          Metrictime,",
+						"          Category,",
+						"          OperationName",
+						"     )) ~> metriccleaned"
 					]
 				}
 			},
@@ -1574,7 +1579,39 @@
 								"writeBehavior": "insert",
 								"sqlWriterUseTableLock": false
 							},
-							"enableStaging": false
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['Metrictime']"
+										},
+										"sink": {
+											"name": "Metrictime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['Category']"
+										},
+										"sink": {
+											"name": "Category",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['OperationName']"
+										},
+										"sink": {
+											"name": "OperationName",
+											"type": "String"
+										}
+									}
+								]
+							}
 						},
 						"inputs": [
 							{
