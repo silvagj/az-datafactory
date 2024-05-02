@@ -1,0 +1,12 @@
+{
+	"name": "datalakelinkedservice",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://silvadatalake.dfs.core.windows.net/",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDc2OTRDNjM2LUM4M0UtNDlDMC05NTZDLUQ1NkI5MDVBRTMyMF9jNWMzODE5MC1lYWYzLTQ1ZGUtOTViZS00NjA4NGJhN2MyZjEiDQp9"
+		}
+	}
+}
