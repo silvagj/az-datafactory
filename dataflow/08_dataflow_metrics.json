@@ -49,6 +49,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
 				"     documentForm: 'documentPerLine') ~> metricstream",
 				"metricstream select(mapColumn(",
 				"          Metrictime = time,",
