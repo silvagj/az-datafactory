@@ -63,7 +63,12 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> metriccleaned"
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          Metrictime,",
+				"          Category,",
+				"          OperationName",
+				"     )) ~> metriccleaned"
 			]
 		}
 	}
