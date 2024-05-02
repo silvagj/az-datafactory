@@ -1757,6 +1757,58 @@
 								"enablePartitionDiscovery": false
 							}
 						}
+					},
+					{
+						"name": "CopyInsightstream",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.json",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "MergeFiles"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "metricstream",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "inputmetrics",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -1768,6 +1820,8 @@
 				"[concat(variables('factoryId'), '/dataflows/08_dataflow_metrics')]",
 				"[concat(variables('factoryId'), '/datasets/metricoutput')]",
 				"[concat(variables('factoryId'), '/datasets/webmetrictable')]",
+				"[concat(variables('factoryId'), '/datasets/metricstream')]",
+				"[concat(variables('factoryId'), '/datasets/inputmetrics')]",
 				"[concat(variables('factoryId'), '/linkedServices/datalakelinkedservice')]"
 			]
 		},
@@ -4654,6 +4708,30 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/inputmetrics')]",
 				"[concat(variables('factoryId'), '/datasets/metricoutput')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/metricstream')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "datalakelinkedservice",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "resourceId=/SUBSCRIPTIONS/3A760EFB-D36F-4EA9-A40C-05A865C05828/RESOURCEGROUPS/SILVA-APPRESOURCE/PROVIDERS/MICROSOFT.WEB/SITES/SILVAAPP",
+						"fileSystem": "insights-metrics-pt1m"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/datalakelinkedservice')]"
 			]
 		}
 	]
