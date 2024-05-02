@@ -1,0 +1,19 @@
+{
+	"name": "metricstream",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "datalakelinkedservice",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "resourceId=/SUBSCRIPTIONS/3A760EFB-D36F-4EA9-A40C-05A865C05828/RESOURCEGROUPS/SILVA-APPRESOURCE/PROVIDERS/MICROSOFT.WEB/SITES/SILVAAPP",
+				"fileSystem": "insights-metrics-pt1m"
+			}
+		},
+		"schema": {}
+	}
+}
