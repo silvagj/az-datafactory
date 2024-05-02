@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "silvadatafactory"
 		},
+		"datalakelinkedservice_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'datalakelinkedservice'"
+		},
 		"silvadatalake_service_connection_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'silvadatalake_service_connection'"
@@ -18,6 +22,10 @@
 		"silvadb_connection_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'silvadb_connection'"
+		},
+		"datalakelinkedservice_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://silvadatalake.dfs.core.windows.net/"
 		},
 		"silvadatalake_service_connection_properties_typeProperties_url": {
 			"type": "string",
@@ -50,6 +58,9 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"datalakelinkedservice_accountKey": {
+						"value": "[parameters('datalakelinkedservice_accountKey')]"
+					},
 					"silvadatalake_service_connection_accountKey": {
 						"value": "[parameters('silvadatalake_service_connection_accountKey')]"
 					},
@@ -58,6 +69,9 @@
 					},
 					"silvadb_connection_connectionString": {
 						"value": "[parameters('silvadb_connection_connectionString')]"
+					},
+					"datalakelinkedservice_properties_typeProperties_url": {
+						"value": "[parameters('datalakelinkedservice_properties_typeProperties_url')]"
 					},
 					"silvadatalake_service_connection_properties_typeProperties_url": {
 						"value": "[parameters('silvadatalake_service_connection_properties_typeProperties_url')]"

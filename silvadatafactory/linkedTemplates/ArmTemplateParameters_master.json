@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "silvadatafactory"
 		},
+		"datalakelinkedservice_accountKey": {
+			"value": ""
+		},
 		"silvadatalake_service_connection_accountKey": {
 			"value": ""
 		},
@@ -13,6 +16,9 @@
 		},
 		"silvadb_connection_connectionString": {
 			"value": ""
+		},
+		"datalakelinkedservice_properties_typeProperties_url": {
+			"value": "https://silvadatalake.dfs.core.windows.net/"
 		},
 		"silvadatalake_service_connection_properties_typeProperties_url": {
 			"value": "https://silvadatalake.dfs.core.windows.net/"
